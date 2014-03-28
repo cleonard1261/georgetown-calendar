@@ -81,7 +81,7 @@ def parse_input(prompt, parse, message):
 
 def main(*argv):
     calendar = Calendar(path="fixtures/calendar.csv")
-    command  = argv[1] if len(argv) > 1 else None
+    command  = argv[1] if len(argv) > 1 else None       # Normally I'd use argparse
 
     if command == "add":
         name     = parse_input("name: ", lambda x: x if x else None, "Please provide an event name!")
