@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 # gtcal
 # A software library for a calendar
 #
@@ -18,5 +17,5 @@ A software library for a calendar
 ## Imports
 ##########################################################################
 
-from events import Event
+from events import *
 from calendar import Calendar

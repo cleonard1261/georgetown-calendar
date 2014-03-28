@@ -19,13 +19,90 @@ Command line interface to the Georgetown Console Calendar
 ##########################################################################
 
 import sys
+import json
+
+from gtcal import *
+from datetime import datetime
+from gtcal.utils import CalendarEncoder
+
+##########################################################################
+## Parse date helper function
+##########################################################################
+
+def parse_date(dstr):
+    """
+    Attempts to parse the datetime from a string
+    """
+
+    def parse(dstr, dfmt):
+        try:
+            return datetime.strptime(dstr, dfmt)
+        except ValueError:
+            return None
+
+    dates = ("%m/%d/%Y", "%Y-%m-%d")
+    times = ("%H:%M", "%H:%M:%S", "%I:%M %p")
+
+    for datefmt in dates:
+        # Try every date format
+        dt = parse(dstr, datefmt)
+        if dt is not None:
+            return dt
+
+        # Try every combination of dates and times
+        for timefmt in times:
+            dt = parse(dstr, datefmt + " " + timefmt)
+            if dt is not None:
+                return dt
+
+    # Try every time format
+    for timefmt in times:
+        dt = parse(dstr, timefmt)
+        if dt is not None:
+            # Ok, so this is implied today, need to deal with that
+            today = datetime.today()
+            return dt.replace(year=today.year, month=today.month, day=today.day)
+
+    return None
+
+def parse_input(prompt, parse, message):
+    value = raw_input(prompt)
+    value = parse(value)
+
+    if value is None:
+        print message
+        return parse_input(prompt, parse, message)
+
+    return value
 
 ##########################################################################
 ## Main method
 ##########################################################################
 
 def main(*argv):
-    pass
+    calendar = Calendar(path="fixtures/calendar.csv")
+    command  = argv[1] if len(argv) > 1 else None
+
+    if command == "add":
+        name     = parse_input("name: ", lambda x: x if x else None, "Please provide an event name!")
+        start    = parse_input("start: ", parse_date, "Specify dates as %Y-%d-%m %H:%M")
+        end      = parse_input("end: ", parse_date, "Specify dates as %Y-%d-%m %H:%M")
+        location = parse_input("location: ", lambda x: x, "")
+        notes    = parse_input("notes: ", lambda x: x, "")
+
+        event = calendar.add_event(name=name, start=start, end=end, notes=notes, location=location)
+        calendar.save()
+        print event.pprint(verbosity=2)
+
+    elif command == "view":
+        print json.dumps(calendar.storage, indent=4, cls=CalendarEncoder)
+
+    elif command == "agenda":
+        print calendar.todays_agenda()
+
+    else:
+        print calendar
+
 
 if __name__ == '__main__':
     main(*sys.argv)
