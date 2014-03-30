@@ -19,7 +19,8 @@ Events class hierarchy
 ##########################################################################
 
 from datetime import datetime
-from datetime import timedelta
+import time
+
 
 
 ZODIAC = {
@@ -46,8 +47,10 @@ class Event(object):
     Base event class that contains all properties and behavior of events.
     """
 
-    def __init__(self):
-        pass
+    def __init__(self, eventname, eventdate, eventtime):
+        self.eventname = eventname
+        self.eventdate = eventdate   
+        self.eventtime = eventtime
 
     def __str__(self):
         pass
@@ -97,77 +100,83 @@ class Birthday(RecurringEvent):
 
         if self.bmth < 2: 
             if self.dday < 22:
-                print ZODIAC[10]
+                results = ZODIAC[10]
             else:
-                print ZODIAC[11]
+                results = ZODIAC[11]
         elif self.bmth < 3: 
             if self.dday < 20:
-                print ZODIAC[11]
+                results = ZODIAC[11]
             else:
-                print ZODIAC[12]
+                results = ZODIAC[12]
         elif self.bmth < 4: 
             if self.dday < 21:
-                print ZODIAC[11]
+                results = ZODIAC[11]
             else:
-                print ZODIAC[1]
+                results = ZODIAC[1]
         elif self.bmth < 5: 
             if self.dday < 22:
-                print ZODIAC[1]
+                results = ZODIAC[1]
             else:
-                print ZODIAC[2]
+                results = ZODIAC[2]
         elif self.bmth < 6: 
             if self.dday < 21:
-                print ZODIAC[2]
+                results = ZODIAC[2]
             else:
-                print ZODIAC[3]
+                results = ZODIAC[3]
         elif self.bmth < 7: 
             if self.dday < 22:
-                print ZODIAC[3]
+                results = ZODIAC[3]
             else:
-                print ZODIAC[4]
+                results = ZODIAC[4]
         elif self.bmth < 8: 
             if self.dday < 23:
-                print ZODIAC[4]
+                results = ZODIAC[4]
             else:
-                print ZODIAC[5]
+                results = ZODIAC[5]
         elif self.bmth < 9: 
             if self.dday < 24:
-                print ZODIAC[5]
+                results = ZODIAC[5]
             else:
-                print ZODIAC[6]
+                results = ZODIAC[6]
         elif self.bmth < 10: 
             if self.dday < 24:
-                print ZODIAC[6]
+                results = ZODIAC[6]
             else:
-                print ZODIAC[7]
+                results = ZODIAC[7]
         elif self.bmth < 11: 
             if self.dday < 24:
-                print ZODIAC[7]
+                results = ZODIAC[7]
             else:
-                print ZODIAC[8]
+                results = ZODIAC[8]
         elif self.bmth < 12: 
             if self.dday < 22:
-                print ZODIAC[8]
+                results = ZODIAC[8]
             else:
-                print ZODIAC[9]
+                results = ZODIAC[9]
         elif self.bmth < 13: 
             if self.dday < 22:
-                print ZODIAC[9]
+                results = ZODIAC[9]
             else:
-                print ZODIAC[10]
+                results = ZODIAC[10]
         else:
-            print "The Zodiac Sign Nazi says, 'NO SIGN FOR YOU!!'"
+            results = "The Zodiac Sign Nazi says, 'NO SIGN FOR YOU!!'"
+
+        return results
 
                 
 
 if __name__ == '__main__':
-    #event = Event("Data Class", datetime.now(), datetime.now(),None, None)
+    event = Event("Test Event One", datetime.now(), '23:30')
+    print event.eventdate
+    print event.eventname
+    print event.eventtime
     birth = Birthday('2001-05-31')
     #birth.bday = '2001-01-31'
 
-    birth.get_sign(birth.bday)
+    zodiac = birth.get_sign(birth.bday)
     age = birth.get_age()
     print "She is", age, "years old!"
+    print "Sign is:", zodiac
 
 
 
