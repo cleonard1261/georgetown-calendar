@@ -31,22 +31,26 @@ class Calendar(object):
     A calender holds and manages events, saving and loading them to disk.
     """
 
-    def __init__(self, eventname, eventdate, eventtime):
+    def __init__(self, calname):
         checkin_date = datetime.datetime.now()
-        event = Event(eventname, eventdate, eventtime)
-        print event.eventdate
-        print event.eventname
-        print event.eventtime
+        self.calname = calname
+
 
     
-    def load(self):
-        pass
+    def load(self, calname):
+        spamwriter.writerow(['Spam'] * 5 + ['Baked Beans'])
+        spamwriter.writerow(['Spam', 'Lovely Spam', 'Wonderful Spam'])
 
-    def save(self):
-        pass
+    def save(self, csvfile):
+        csvfile.close()
 
-    def add_event(self):
-        pass
+    def calopen(self, calname):
+        with open(calname+'.csv', 'wb') as csvfile:
+            csvwriter = csv.writer(csvfile, delimiter=',')
+        return csvfile
+
+    def add_event(self, Event):
+        csvwriter.writerow(['Spam', 'Lovely Spam', 'Wonderful Spam'])
 
     def remove_event(self):
         pass
@@ -61,7 +65,11 @@ class Calendar(object):
         pass
 
 if __name__ == '__main__':
-    cal = Calendar("Cal Test Event", '2013-03-30', "13:30")
-    
+    cal = Calendar("CalendarOne")
+    print cal.calname
+    csvfile = cal.calopen(cal.calname)
+    event = Event("Cal Test Event", '2013-03-30', "13:30")
+    cal.add_event(event)
+    cal.save(csvfile)
 
 
