@@ -38,8 +38,7 @@ class Calendar(object):
 
     
     def load(self, calname):
-        spamwriter.writerow(['Spam'] * 5 + ['Baked Beans'])
-        spamwriter.writerow(['Spam', 'Lovely Spam', 'Wonderful Spam'])
+        pass
 
     def save(self, csvfile):
         csvfile.close()
@@ -50,10 +49,24 @@ class Calendar(object):
         return csvfile
 
     def add_event(self, Event):
-        csvwriter.writerow(['Spam', 'Lovely Spam', 'Wonderful Spam'])
+        pass
 
     def remove_event(self):
-        pass
+        file_name = 'C:\Temp\my_file.csv'
+        output_file = 'C:\Temp\new_file.csv'
+        csv_file = open(file_name, 'r')
+        ## note that the index of the year column is excluded
+        column_indices = [0,1,3,4]
+        with open(output_file, 'w') as fh:
+            reader = csv.reader(csv_file, delimiter=',')
+            for row in reader:
+               tmp_row = []
+               for col_inx in column_indices:
+                   tmp_row.append(row[col_inx])
+               fh.write(','.join(tmp_row))
+        # see below for ideas on reading in csv file and writing to a temp file.
+        # http://stackoverflow.com/questions/7588934/deleting-columns-in-a-csv-with-python
+        # see jointest.py for os.system commads to rm the old file
 
     def update_event(self):
         pass

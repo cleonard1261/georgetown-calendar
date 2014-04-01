@@ -19,6 +19,7 @@ Events class hierarchy
 ##########################################################################
 
 from datetime import datetime
+import dateutil
 import time
 
 
@@ -59,12 +60,22 @@ class RecurringEvent(Event):
     """
     Event that repeats for a fixed amount of time.
     """
-
-    def __init__(self):
-        pass
+   
+    # events can occur daily, weekly, monthly, and yearly.
+    def __init__(self, eventname, eventdate, eventtime,recurs='weekly'):
+        self.eventname = eventname
+        self.eventtime = eventtime
+        self.eventdate = eventdate
+        self.recurs    = recurs
+        
+         self.dt = parser.parse(self.eventdate+' '+self.eventtime)
 
     def next_event(self):
-        pass
+        if self.recurs == 'daily':
+            results = dateutil.parser.parse(str(self.dt.year) + '-' + str(self.dt.month) + '-' + str(self.dt.day+1) +' ' + str(self.eventtime))
+        else:
+            print 'whatever'
+        return results
 
 class Birthday(RecurringEvent):
     """
@@ -177,6 +188,8 @@ if __name__ == '__main__':
     age = birth.get_age()
     print "She is", age, "years old!"
     print "Sign is:", zodiac
+    recurevnt = RecurringEvent("Test Event One", '2014-03-31', '23:30', 'daily')
+    print recurevnt.next_event()
 
 
 
