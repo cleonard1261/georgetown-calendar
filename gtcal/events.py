@@ -105,10 +105,10 @@ class RecurringEvent(Event):
             self.end_of_month()
         elif self.recurs == 'last_bus_day_of_cal_month':
             self.end_of_month()
-            while not self.dt.weekday() < 6:
+            while not self.dt.weekday() < 5:
                self.dt = self.dt - timedelta(days=1)
-        else:
-            if self.isleapyear(self.dt.year) and int(self.dt.month) == 2:
+        else:  # yearly
+            if self.isleapyear(self.dt.year) and int(self.dt.month) == 2 and int(self.dt.day) == 29:
                 self.dt = self.dt.replace(year=int(self.dt.year+1), day=28)
             else: 
                 self.dt = self.dt.replace(year=int(self.dt.year+1))
@@ -225,7 +225,7 @@ if __name__ == '__main__':
     age = birth.get_age()
     print "She is", age, "years old!"
     print "Sign is:", zodiac
-    recurevnt = RecurringEvent("Test Event One", '2008-02-29', '23:30', 'monthly')
+    recurevnt = RecurringEvent("Test Event One", '2008-02-29', '23:30', 'yearly')
     print recurevnt.next_event()
 
 
