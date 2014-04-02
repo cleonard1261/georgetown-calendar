@@ -103,7 +103,10 @@ class RecurringEvent(Event):
             while not self.dt.weekday() < 6:
                self.dt = self.dt - timedelta(days=1)
         else:
-            self.dt = self.dt.replace(year=int(self.dt.year+1))
+            if self.isleapyear(self.dt.year) and int(self.dt.month) == 2:
+                self.dt = self.dt.replace(year=int(self.dt.year+1), day=28)
+            else: 
+                self.dt = self.dt.replace(year=int(self.dt.year+1))
         return self.dt
 
 class Birthday(RecurringEvent):
@@ -217,7 +220,7 @@ if __name__ == '__main__':
     age = birth.get_age()
     print "She is", age, "years old!"
     print "Sign is:", zodiac
-    recurevnt = RecurringEvent("Test Event One", '2014-07-30', '23:30', 'last_bus_day_of_cal_month')
+    recurevnt = RecurringEvent("Test Event One", '2008-02-29', '23:30', 'yearly')
     print recurevnt.next_event()
 
 
