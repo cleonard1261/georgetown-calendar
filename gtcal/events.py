@@ -92,6 +92,11 @@ class RecurringEvent(Event):
             self.dt = self.dt.replace(month=int(self.dt.month+1), day=28)
 
     def next_event(self):
+        if self.recurs == 'monthly':
+            if int(self.dt.month+1) == 13:
+                self.dt = self.dt.replace(year=int(self.dt.year + 1), month=1)
+            else:
+                self.dt = self.dt.replace(month=int(self.dt.month+1))
         if self.recurs == 'weekly':
             self.dt = self.dt + timedelta(days=7)
         elif self.recurs == 'daily':
@@ -220,7 +225,7 @@ if __name__ == '__main__':
     age = birth.get_age()
     print "She is", age, "years old!"
     print "Sign is:", zodiac
-    recurevnt = RecurringEvent("Test Event One", '2008-02-29', '23:30', 'yearly')
+    recurevnt = RecurringEvent("Test Event One", '2008-02-29', '23:30', 'monthly')
     print recurevnt.next_event()
 
 
