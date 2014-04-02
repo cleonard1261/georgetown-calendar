@@ -18,8 +18,9 @@ Events class hierarchy
 ## Imports
 ##########################################################################
 
-from datetime import datetime
-import dateutil
+from datetime import *
+#from  dateutil import relativedelta
+from  dateutil import parser
 import time
 
 
@@ -67,15 +68,43 @@ class RecurringEvent(Event):
         self.eventtime = eventtime
         self.eventdate = eventdate
         self.recurs    = recurs
-        
-         self.dt = parser.parse(self.eventdate+' '+self.eventtime)
+
+        #from  dateutil import parser
+        self.dt = parser.parse(self.eventdate+' '+self.eventtime)
+
+    def isleapyear(self,year):
+        if year % 4 == 0:
+            return True
+        else:
+            return False
+
+    def end_of_month(self):
+        if int(self.dt.month + 1) in [3,5,7,8,10,12,13]:
+            if int(self.dt.month+1) == 13:
+                self.dt = self.dt.replace(year=int(self.dt.year + 1), month=1, day=31)
+            else:
+                self.dt = self.dt.replace(month=int(self.dt.month+1),day=31)
+        elif int(self.dt.month+1) in [4,6,9,11]:
+            self.dt = self.dt.replace(month=int(self.dt.month+1),day=30)
+        elif self.isleapyear(int(self.dt.year)):
+            self.dt = self.dt.replace(month=int(self.dt.month+1), day=29)
+        else:
+            self.dt = self.dt.replace(month=int(self.dt.month+1), day=28)
 
     def next_event(self):
-        if self.recurs == 'daily':
-            results = dateutil.parser.parse(str(self.dt.year) + '-' + str(self.dt.month) + '-' + str(self.dt.day+1) +' ' + str(self.eventtime))
+        if self.recurs == 'weekly':
+            self.dt = self.dt + timedelta(days=7)
+        elif self.recurs == 'daily':
+            self.dt = self.dt + timedelta(days=1)
+        elif self.recurs == 'last_day_of_cal_month':
+            self.end_of_month()
+        elif self.recurs == 'last_bus_day_of_cal_month':
+            self.end_of_month()
+            while not self.dt.weekday() < 6:
+               self.dt = self.dt - timedelta(days=1)
         else:
-            print 'whatever'
-        return results
+            self.dt = self.dt.replace(year=int(self.dt.year+1))
+        return self.dt
 
 class Birthday(RecurringEvent):
     """
@@ -188,7 +217,7 @@ if __name__ == '__main__':
     age = birth.get_age()
     print "She is", age, "years old!"
     print "Sign is:", zodiac
-    recurevnt = RecurringEvent("Test Event One", '2014-03-31', '23:30', 'daily')
+    recurevnt = RecurringEvent("Test Event One", '2014-07-30', '23:30', 'last_bus_day_of_cal_month')
     print recurevnt.next_event()
 
 

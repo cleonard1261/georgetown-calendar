@@ -17,10 +17,12 @@ Calendar class and disk functionality
 ##########################################################################
 ## Imports
 ##########################################################################
-from events import Event
+import dateutil
+#from events import Event
 #from datetime import datetime
 import datetime
 import csv
+#from events import *
 
 ##########################################################################
 ## Main Calendar App
@@ -32,7 +34,7 @@ class Calendar(object):
     """
 
     def __init__(self, calname):
-        checkin_date = datetime.datetime.now()
+        checkin_date = datetime.now()
         self.calname = calname
 
 
