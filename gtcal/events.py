@@ -2,8 +2,8 @@
 # gtcal.events
 # Events class hierarchy
 #
-# Author:
-# Created:
+# Author: Chad Leonard
+# Created: 20140331
 #
 # Copyright (C) 2014 Georgetown University
 # For license information, see LICENSE.txt
@@ -60,6 +60,7 @@ class Event(object):
 class RecurringEvent(Event):
     """
     Event that repeats for a fixed amount of time.
+	recurrences: 'daily', 'weekly', 'monthly', 'last_day_of_cal_month', 'last_bus_day_of_cal_month', and 'yearly'
     """
    
     # events can occur daily, weekly, monthly, and yearly.
